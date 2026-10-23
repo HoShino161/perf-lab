@@ -1,13 +1,4 @@
-"""多线程压测器：阶梯加压 + 逐秒快照。
-
-为什么不用 Locust：gevent 在 Windows 上装不利索，而我要的东西很简单——
-按阶梯起线程、打指定秒数、每秒记一次快照。自己写反而更好控制发压节奏，
-也能顺手把服务端 /metrics 一起拉下来存成 CSV。
-
-用法：
-    python loadgen.py --stages 10:20,30:30,60:30 --label baseline
-    python loadgen.py --stages 60:60 --label after-4workers
-"""
+"""多线程压测器。阶梯加压，每秒记一次快照。"""
 from __future__ import annotations
 
 import argparse
