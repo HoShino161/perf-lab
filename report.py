@@ -9,7 +9,7 @@ RESULTS = Path(__file__).resolve().parent / "results"
 
 
 def latest(prefix: str) -> Path | None:
-    files = sorted(RESULTS.glob(f"{prefix}-*.json"))
+    files = sorted(RESULTS.glob(f"{prefix}*.json"))
     return files[-1] if files else None
 
 
@@ -30,7 +30,7 @@ def build(base: dict | None, target: dict | None) -> str:
     labels: list[str] = []
     series: dict[str, dict[str, list]] = {}
 
-    for name, data in (("基线（单进程）", base), ("优化后（4 进程）", target)):
+    for name, data in (("基线", base), ("优化后", target)):
         if not data:
             continue
         users = [s["users"] for s in data["stages"]]
@@ -88,7 +88,7 @@ def build(base: dict | None, target: dict | None) -> str:
 {table_base}
 </table>
 
-<p>优化后（4 进程）：</p>
+<p>优化后：</p>
 <table>
 <tr><th>并发</th><th>请求数</th><th>QPS</th><th>P50</th><th>P90</th><th>P95</th><th>P99</th><th>错误率</th></tr>
 {table_target}
@@ -99,16 +99,6 @@ def build(base: dict | None, target: dict | None) -> str:
   <div><canvas id="p95Chart"></canvas></div>
 </div>
 
-<h2>拐点</h2>
-<div class="note">
-基线在 10 并发时 QPS 446、P95 40ms；加到 30 并发，QPS 掉到 381，P95 涨到 197ms；
-60 并发时 QPS 只剩 241，P95 1110ms。并发翻 6 倍，吞吐反降 46%，延迟涨 27 倍——
-典型的单进程 CPU 打满后请求排队，不是「慢」，是「等」。
-<br><br>
-4 进程后拐点后移到 30 并发（QPS 1003、P95 78ms）。继续加到 60 并发，
-QPS 回落到 551，说明第二个瓶颈出现了。
-</div>
-
 <h2>优化对比（60 并发档）</h2>
 <table>
 <tr><th>指标</th><th>基线</th><th>优化后</th><th>变化</th></tr>
@@ -117,23 +107,6 @@ QPS 回落到 551，说明第二个瓶颈出现了。
 <tr><td>P95</td><td>{base['stages'][-1]['p95'] if base else '-'} ms</td>
 <td>{target['stages'][-1]['p95'] if target else '-'} ms</td><td>{gain('p95')}</td></tr>
 </table>
-
-<h2>做了什么</h2>
-<p>只改了一处：<code>uvicorn --workers 4</code>。</p>
-<p>Python 单进程一次只能跑一个线程（GIL），请求再快也得排队。加进程是最省事的解法，
-代价是每个进程各有一份内存指标、SQLite 多进程写锁竞争更明显。</p>
-
-<h2>第二个瓶颈在哪</h2>
-<p>60 并发下 QPS 掉头，几个可疑点，按可能性排：</p>
-<ul>
-<li><strong>SQLite 写锁</strong>：下单、取消、支付回调都是写操作。多进程同时写会排队，
-<code>database is locked</code> 在长事务里会变成 500。压测里错误率仍为 0，说明还没到这个程度。</li>
-<li><strong>订单列表没分页</strong>：<code>GET /api/orders</code> 每次全表扫用户订单，压测期间订单量持续增长，
-这条接口的耗时是随数据量上涨的。</li>
-<li><strong>每请求新建数据库连接</strong>：<code>connect()</code> 每次调用都重新开 SQLite 连接，
-没有复用。请求量上去后这部分开销不可忽略。</li>
-</ul>
-<p>下一步按这个顺序试：连接池 → 订单列表分页 → 换 PostgreSQL 再看一次曲线。</p>
 
 <h2>口径说明</h2>
 <p>QPS = 该档总请求数 ÷ 该档持续秒数。延迟为客户端侧测量，含网络与序列化开销。
@@ -186,7 +159,7 @@ def main() -> int:
     args = parser.parse_args()
 
     base_path = latest(args.baseline or "baseline")
-    target_path = latest(args.target or "after-4workers")
+    target_path = latest(args.target or "after-")
     if not base_path and not target_path:
         print("results/ 下没有汇总文件，先跑 loadgen.py")
         return 1
