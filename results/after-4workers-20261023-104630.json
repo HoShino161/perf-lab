@@ -1,0 +1,83 @@
+{
+  "label": "after-4workers",
+  "url": "http://127.0.0.1:8000",
+  "stages": [
+    {
+      "users": 10,
+      "duration_s": 20,
+      "requests": 17828,
+      "qps": 891.4,
+      "ok": 17818,
+      "fail": 10,
+      "error_rate": 0.06,
+      "p50": 7.48,
+      "p90": 19.16,
+      "p95": 23.39,
+      "p99": 37.53,
+      "avg": 11.22,
+      "by_status": {
+        "-1": 5,
+        "200": 16943,
+        "201": 875,
+        "500": 5
+      }
+    },
+    {
+      "users": 30,
+      "duration_s": 30,
+      "requests": 30104,
+      "qps": 1003.5,
+      "ok": 30104,
+      "fail": 0,
+      "error_rate": 0.0,
+      "p50": 21.44,
+      "p90": 58.96,
+      "p95": 78.09,
+      "p99": 132.69,
+      "avg": 29.91,
+      "by_status": {
+        "200": 28580,
+        "201": 1524
+      }
+    },
+    {
+      "users": 60,
+      "duration_s": 30,
+      "requests": 16535,
+      "qps": 551.2,
+      "ok": 16535,
+      "fail": 0,
+      "error_rate": 0.0,
+      "p50": 42.69,
+      "p90": 294.98,
+      "p95": 559.24,
+      "p99": 948.13,
+      "avg": 109.04,
+      "by_status": {
+        "200": 15735,
+        "201": 800
+      }
+    }
+  ],
+  "server_metrics_end": {
+    "shop_http_requests_total{method=\"GET\",path=\"/api/orders\",status=\"200\"}": 2398.0,
+    "shop_http_requests_total{method=\"GET\",path=\"/api/products\",status=\"200\"}": 8207.0,
+    "shop_http_requests_total{method=\"GET\",path=\"/api/products/1\",status=\"200\"}": 2500.0,
+    "shop_http_requests_total{method=\"GET\",path=\"/api/products/2\",status=\"200\"}": 2446.0,
+    "shop_http_requests_total{method=\"POST\",path=\"/api/orders\",status=\"201\"}": 811.0,
+    "shop_http_request_duration_seconds_sum{path=\"/api/orders\"}": 366.83478,
+    "shop_http_request_duration_seconds_count{path=\"/api/orders\"}": 3209.0,
+    "shop_http_request_duration_seconds_sum{path=\"/api/products\"}": 165.204016,
+    "shop_http_request_duration_seconds_count{path=\"/api/products\"}": 8207.0,
+    "shop_http_request_duration_seconds_sum{path=\"/api/products/1\"}": 49.783124,
+    "shop_http_request_duration_seconds_count{path=\"/api/products/1\"}": 2500.0,
+    "shop_http_request_duration_seconds_sum{path=\"/api/products/2\"}": 48.336375,
+    "shop_http_request_duration_seconds_count{path=\"/api/products/2\"}": 2446.0,
+    "shop_stock{product=\"机械键盘\"}": 998354.0,
+    "shop_stock{product=\"无线鼠标\"}": 998447.0,
+    "shop_stock{product=\"显示器支架\"}": 1000000.0,
+    "shop_orders_total{status=\"cancelled\"}": 12.0,
+    "shop_orders_total{status=\"created\"}": 4555.0,
+    "shop_orders_total{status=\"paid\"}": 12.0
+  }
+}
