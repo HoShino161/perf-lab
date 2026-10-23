@@ -1,8 +1,4 @@
-"""把 results/ 下的压测汇总生成 HTML 报告。
-
-取两次运行做对比：第一次是基线，第二次是优化后。
-文件名靠 --baseline / --target 指定，不指定就取同类里最新的一个。
-"""
+"""读 results/*.json 生成 HTML 对比报告。"""
 from __future__ import annotations
 
 import argparse
