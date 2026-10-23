@@ -40,11 +40,12 @@ report.html           对比报告
 ## 目录
 
 ```
-prepare.py     库存重置 + 建压测账号
-loadgen.py     阶梯压测器
-report.py      生成 HTML 报告
-results/       CSV、JSON、报告
-docs/          压测结果
+prepare.py       库存重置 + 建压测账号
+loadgen.py       阶梯压测器
+report.py        生成 HTML 报告
+probe_orders.py  订单列表耗时探针，按订单量测接口耗时
+results/         CSV、JSON、报告
+docs/            三轮压测数据
 ```
 
 ## 已知限制
